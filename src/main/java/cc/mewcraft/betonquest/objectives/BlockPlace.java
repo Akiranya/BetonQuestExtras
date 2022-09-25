@@ -16,7 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-@CustomLog(topic = "BetonQuest -> ItemsAdder")
+@CustomLog
 public class BlockPlace extends Objective implements Listener {
 
     private final String namespacedID;

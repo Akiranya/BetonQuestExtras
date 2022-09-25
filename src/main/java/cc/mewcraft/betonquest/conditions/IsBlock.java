@@ -10,7 +10,7 @@ import org.betonquest.betonquest.exceptions.QuestRuntimeException;
 import org.betonquest.betonquest.utils.location.LocationData;
 import org.bukkit.Location;
 
-@CustomLog(topic = "BetonQuest -> ItemsAdder")
+@CustomLog
 public class IsBlock extends Condition {
 
     private final String namespacedID;

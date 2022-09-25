@@ -9,7 +9,7 @@ import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.betonquest.betonquest.utils.PlayerConverter;
 import org.bukkit.inventory.ItemStack;
 
-@CustomLog(topic = "BetonQuest -> ItemsAdder")
+@CustomLog
 public class HasItems extends Condition {
 
     private final String namespacedID;

@@ -8,7 +8,7 @@ import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@CustomLog(topic = "BetonQuest -> ItemsAdder")
+@CustomLog
 public final class ItemsAdderUtil {
 
     public static void validateCustomStack(@NotNull QuestPackage questPackage, @NotNull String namespacedID) throws InstructionParseException {
