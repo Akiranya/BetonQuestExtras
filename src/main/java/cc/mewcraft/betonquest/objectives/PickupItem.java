@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
-@CustomLog(topic = "BetonQuestItemsAdder")
+@CustomLog(topic = "BetonQuest -> ItemsAdder")
 public class PickupItem extends Objective implements Listener {
 
     private final String namespacedID;

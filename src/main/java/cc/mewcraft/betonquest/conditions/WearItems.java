@@ -8,7 +8,7 @@ import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.betonquest.betonquest.utils.PlayerConverter;
 import org.bukkit.inventory.ItemStack;
 
-@CustomLog(topic = "BetonQuestItemsAdder")
+@CustomLog(topic = "BetonQuest -> ItemsAdder")
 public class WearItems extends Condition {
     private final String namespacedID;
 

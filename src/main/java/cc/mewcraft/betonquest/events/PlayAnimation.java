@@ -7,7 +7,7 @@ import org.betonquest.betonquest.api.QuestEvent;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.betonquest.betonquest.utils.PlayerConverter;
 
-@CustomLog(topic = "BetonQuestItemsAdder")
+@CustomLog(topic = "BetonQuest -> ItemsAdder")
 public class PlayAnimation extends QuestEvent {
 
     private final String animation;
