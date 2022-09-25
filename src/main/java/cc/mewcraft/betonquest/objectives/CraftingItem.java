@@ -31,7 +31,7 @@ public class CraftingItem extends Objective implements Listener {
             throw new InstructionParseException("Amount cannot be less than 1");
         }
         namespacedID = instruction.next() + ":" + instruction.next();
-        CustomStack cs = ItemsAdderUtil.validateCustomStackSilently(namespacedID);
+        CustomStack cs = ItemsAdderUtil.validateCustomStackSilently(instruction.getPackage(), namespacedID);
         item = cs != null ? cs.getItemStack() : null;
     }
 

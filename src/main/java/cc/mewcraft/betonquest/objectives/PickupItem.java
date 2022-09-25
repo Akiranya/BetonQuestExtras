@@ -37,7 +37,7 @@ public class PickupItem extends Objective implements Listener {
             throw new InstructionParseException("Amount cannot be less than 1");
         }
         namespacedID = instruction.next() + ":" + instruction.next();
-        ItemsAdderUtil.validateCustomStackSilently(namespacedID);
+        ItemsAdderUtil.validateCustomStackSilently(instruction.getPackage(), namespacedID);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

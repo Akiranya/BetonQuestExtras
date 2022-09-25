@@ -16,7 +16,7 @@ public class WearItems extends Condition {
     public WearItems(Instruction instruction) throws InstructionParseException {
         super(instruction, true);
         namespacedID = instruction.next() + ":" + instruction.next();
-        ItemsAdderUtil.validateCustomStackSilently(namespacedID);
+        ItemsAdderUtil.validateCustomStackSilently(instruction.getPackage(), namespacedID);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class EnchantItem extends Objective implements Listener {
 		super(instruction);
 		template = Objective.ObjectiveData.class;
 		namespacedID = instruction.next() + ":" + instruction.next();
-		ItemsAdderUtil.validateCustomStackSilently(namespacedID);
+		ItemsAdderUtil.validateCustomStackSilently(instruction.getPackage(), namespacedID);
 		enchantments = instruction.getList(EnchantmentData::convert);
 		if (enchantments.isEmpty()) {
 			throw new InstructionParseException("Enchantments cannot be empty");

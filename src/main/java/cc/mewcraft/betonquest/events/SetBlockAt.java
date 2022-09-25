@@ -19,7 +19,7 @@ public class SetBlockAt extends QuestEvent {
     public SetBlockAt(Instruction instruction) throws InstructionParseException {
         super(instruction, true);
         namespacedID = instruction.next() + ":" + instruction.next();
-        ItemsAdderUtil.validateCustomBlockSilently(namespacedID);
+        ItemsAdderUtil.validateCustomBlockSilently(instruction.getPackage(), namespacedID);
         locationData = instruction.getLocation().getLocationData();
     }
 

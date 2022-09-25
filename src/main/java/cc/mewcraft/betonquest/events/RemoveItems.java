@@ -19,7 +19,7 @@ public class RemoveItems extends QuestEvent {
         super(instruction, true);
         amount = instruction.getInt();
         namespacedID = instruction.next() + ":" + instruction.next();
-        ItemsAdderUtil.validateCustomStackSilently(namespacedID);
+        ItemsAdderUtil.validateCustomStackSilently(instruction.getPackage(), namespacedID);
     }
 
     @Override
