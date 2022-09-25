@@ -1,5 +1,6 @@
 package cc.mewcraft.betonquest.objectives;
 
+import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.Instruction;
@@ -25,10 +26,7 @@ public class EnchantItem extends Objective implements Listener {
 		super(instruction);
 		template = Objective.ObjectiveData.class;
 		namespacedID = instruction.next() + ":" + instruction.next();
-		CustomStack cs = CustomStack.getInstance(namespacedID);
-		if (cs == null) {
-			throw new InstructionParseException("Unknown item ID: " + namespacedID);
-		}
+		ItemsAdderUtil.validateCustomStackSilently(namespacedID);
 		enchantments = instruction.getList(EnchantmentData::convert);
 		if (enchantments.isEmpty()) {
 			throw new InstructionParseException("Enchantments cannot be empty");

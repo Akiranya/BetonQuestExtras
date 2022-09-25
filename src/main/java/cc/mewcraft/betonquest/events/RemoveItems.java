@@ -1,5 +1,6 @@
 package cc.mewcraft.betonquest.events;
 
+import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import lombok.CustomLog;
 import org.betonquest.betonquest.Instruction;
@@ -18,10 +19,7 @@ public class RemoveItems extends QuestEvent {
         super(instruction, true);
         amount = instruction.getInt();
         namespacedID = instruction.next() + ":" + instruction.next();
-        CustomStack cs = CustomStack.getInstance(namespacedID);
-        if (cs == null) {
-            throw new InstructionParseException("Unknown item ID: " + namespacedID);
-        }
+        ItemsAdderUtil.validateCustomStackSilently(namespacedID);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package cc.mewcraft.betonquest.conditions;
 
+import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import lombok.CustomLog;
 import org.betonquest.betonquest.Instruction;
@@ -21,10 +22,7 @@ public class HasItems extends Condition {
             throw new InstructionParseException("Amount cannot be less than 1");
         }
         namespacedID = instruction.next() + ":" + instruction.next();
-        CustomStack cs = CustomStack.getInstance(namespacedID);
-        if (cs == null) {
-            throw new InstructionParseException("Unknown item ID: " + namespacedID);
-        }
+        ItemsAdderUtil.validateCustomStackSilently(namespacedID);
     }
 
     @Override

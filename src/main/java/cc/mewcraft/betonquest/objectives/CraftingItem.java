@@ -1,5 +1,6 @@
 package cc.mewcraft.betonquest.objectives;
 
+import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.Instruction;
@@ -30,11 +31,8 @@ public class CraftingItem extends Objective implements Listener {
             throw new InstructionParseException("Amount cannot be less than 1");
         }
         namespacedID = instruction.next() + ":" + instruction.next();
-        CustomStack cs = CustomStack.getInstance(namespacedID);
-        if (cs == null) {
-            throw new InstructionParseException("Unknown item ID: " + namespacedID);
-        }
-        item = cs.getItemStack();
+        CustomStack cs = ItemsAdderUtil.validateCustomStackSilently(namespacedID);
+        item = cs != null ? cs.getItemStack() : null;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -48,10 +46,10 @@ public class CraftingItem extends Objective implements Listener {
             ItemStack result = event.getRecipe().getResult();
             CustomStack customStack = CustomStack.byItemStack(result);
             if (customStack != null && customStack.getNamespacedID().equalsIgnoreCase(namespacedID)) {
-                    int absoluteCreations = countPossibleCrafts(event);
-                    int remainingSpace = countRemainingSpace(player);
-                    playerData.subtract(Math.min(remainingSpace, absoluteCreations));
-                    if (playerData.isZero()) completeObjective(playerID);
+                int absoluteCreations = countPossibleCrafts(event);
+                int remainingSpace = countRemainingSpace(player);
+                playerData.subtract(Math.min(remainingSpace, absoluteCreations));
+                if (playerData.isZero()) completeObjective(playerID);
             }
         }
     }

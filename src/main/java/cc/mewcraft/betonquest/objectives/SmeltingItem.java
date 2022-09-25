@@ -1,5 +1,6 @@
 package cc.mewcraft.betonquest.objectives;
 
+import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.Instruction;
@@ -28,10 +29,7 @@ public class SmeltingItem extends Objective implements Listener {
             throw new InstructionParseException("Amount cannot be less than 1");
         }
         namespacedID = instruction.next() + ":" + instruction.next();
-        CustomStack cs = CustomStack.getInstance(namespacedID);
-        if (cs == null) {
-            throw new InstructionParseException("Unknown item ID: " + namespacedID);
-        }
+        ItemsAdderUtil.validateCustomStackSilently(namespacedID);
     }
 
     @EventHandler

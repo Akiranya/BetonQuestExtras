@@ -1,5 +1,6 @@
 package cc.mewcraft.betonquest.conditions;
 
+import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import lombok.CustomLog;
 import org.betonquest.betonquest.Instruction;
@@ -15,10 +16,7 @@ public class WearItems extends Condition {
     public WearItems(Instruction instruction) throws InstructionParseException {
         super(instruction, true);
         namespacedID = instruction.next() + ":" + instruction.next();
-        CustomStack cs = CustomStack.getInstance(namespacedID);
-        if (cs == null) {
-            throw new InstructionParseException("Unknown item ID: " + namespacedID);
-        }
+        ItemsAdderUtil.validateCustomStackSilently(namespacedID);
     }
 
     @Override
