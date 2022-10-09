@@ -1,4 +1,4 @@
-package cc.mewcraft.betonquest.conditions;
+package cc.mewcraft.betonquest.itemsadder.conditions;
 
 import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;

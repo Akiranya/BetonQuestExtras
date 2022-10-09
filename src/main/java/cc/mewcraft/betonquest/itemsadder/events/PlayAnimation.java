@@ -1,4 +1,4 @@
-package cc.mewcraft.betonquest.events;
+package cc.mewcraft.betonquest.itemsadder.events;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import lombok.CustomLog;

@@ -1,4 +1,4 @@
-package cc.mewcraft.betonquest.objectives;
+package cc.mewcraft.betonquest.itemsadder.objectives;
 
 import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;

@@ -1,4 +1,4 @@
-package cc.mewcraft.betonquest.events;
+package cc.mewcraft.betonquest.itemsadder.events;
 
 import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
