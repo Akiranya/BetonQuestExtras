@@ -1,4 +1,4 @@
-package cc.mewcraft.betonquest.itemsadder.objectives;
+package cc.mewcraft.betonquest.itemsadder;
 
 import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.Events.CustomBlockPlaceEvent;
@@ -6,6 +6,8 @@ import lombok.CustomLog;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.Objective;
+import org.betonquest.betonquest.api.profiles.OnlineProfile;
+import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.config.Config;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.betonquest.betonquest.exceptions.QuestRuntimeException;
@@ -17,14 +19,14 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 @CustomLog
-public class BlockPlace extends Objective implements Listener {
+public class PlaceBlockObjective extends Objective implements Listener {
 
     private final String namespacedID;
     private final int amount;
     private final boolean notify;
     private final int notifyInterval;
 
-    public BlockPlace(Instruction instruction) throws InstructionParseException {
+    public PlaceBlockObjective(Instruction instruction) throws InstructionParseException {
         super(instruction);
         template = BlockData.class;
         notifyInterval = instruction.getInt(instruction.getOptional("notify"), 1);
@@ -39,20 +41,20 @@ public class BlockPlace extends Objective implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlaceBlock(CustomBlockPlaceEvent e) {
-        String playerID = PlayerConverter.getID(e.getPlayer());
+        OnlineProfile profile = PlayerConverter.getID(e.getPlayer());
 
-        if (containsPlayer(playerID)
-            && checkConditions(playerID)
+        if (containsPlayer(profile)
+            && checkConditions(profile)
             && e.getNamespacedID().equalsIgnoreCase(namespacedID)) {
 
-            BlockData playerData = (BlockData) dataMap.get(playerID);
+            BlockData playerData = (BlockData) dataMap.get(profile);
             playerData.add();
             if (playerData.getAmount() == amount) {
-                completeObjective(playerID);
+                completeObjective(profile);
             } else if (notify && playerData.getAmount() % notifyInterval == 0) {
                 if (playerData.getAmount() > amount) {
                     try {
-                        Config.sendNotify(instruction.getPackage().getPackagePath(), playerID, "blocks_to_place", new String[]{String.valueOf(playerData.getAmount() - amount)}, "blocks_to_place,info");
+                        Config.sendNotify(instruction.getPackage().getPackagePath(), profile, "blocks_to_place", new String[]{String.valueOf(playerData.getAmount() - amount)}, "blocks_to_place,info");
                     } catch (QuestRuntimeException ex1) {
                         try {
                             LOG.warn("The notify system was unable to play a sound for the 'blocks_to_place' category in '" + instruction.getObjective().getFullID() + "'. Error was: '" + ex1.getMessage() + "'");
@@ -63,7 +65,7 @@ public class BlockPlace extends Objective implements Listener {
                 }
             } else {
                 try {
-                    Config.sendNotify(instruction.getPackage().getPackagePath(), playerID, "blocks_to_place", new String[]{String.valueOf(amount - playerData.getAmount())}, "blocks_to_place,info");
+                    Config.sendNotify(instruction.getPackage().getPackagePath(), profile, "blocks_to_place", new String[]{String.valueOf(amount - playerData.getAmount())}, "blocks_to_place,info");
                 } catch (QuestRuntimeException ex1) {
                     try {
                         LOG.warn("The notify system was unable to play a sound for the 'blocks_to_place' category in '" + instruction.getObjective().getFullID() + "'. Error was: '" + ex1.getMessage() + "'");
@@ -92,19 +94,19 @@ public class BlockPlace extends Objective implements Listener {
     }
 
     @Override
-    public String getProperty(String name, String playerID) {
+    public String getProperty(String name, Profile profile) {
         if ("left".equalsIgnoreCase(name))
-            return Integer.toString(amount - ((BlockData) dataMap.get(playerID)).getAmount());
+            return Integer.toString(amount - ((BlockData) dataMap.get(profile)).getAmount());
         if ("amount".equalsIgnoreCase(name))
-            return Integer.toString(((BlockData) dataMap.get(playerID)).getAmount());
+            return Integer.toString(((BlockData) dataMap.get(profile)).getAmount());
         return "";
     }
 
     public static class BlockData extends Objective.ObjectiveData {
         private int amount;
 
-        public BlockData(String instruction, String playerID, String objID) {
-            super(instruction, playerID, objID);
+        public BlockData(String instruction, Profile profile, String objID) {
+            super(instruction, profile, objID);
             amount = Integer.parseInt(instruction);
         }
 
@@ -121,4 +123,5 @@ public class BlockPlace extends Objective implements Listener {
             return String.valueOf(amount);
         }
     }
+
 }

@@ -1,22 +1,23 @@
-package cc.mewcraft.betonquest.itemsadder.events;
+package cc.mewcraft.betonquest.itemsadder;
 
 import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomBlock;
 import lombok.CustomLog;
 import org.betonquest.betonquest.Instruction;
-import org.betonquest.betonquest.api.QuestEvent;
+import org.betonquest.betonquest.api.Condition;
+import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.betonquest.betonquest.exceptions.QuestRuntimeException;
 import org.betonquest.betonquest.utils.location.LocationData;
 import org.bukkit.Location;
 
 @CustomLog
-public class SetBlockAt extends QuestEvent {
+public class BlockCondition extends Condition {
 
     private final String namespacedID;
     private final LocationData locationData;
 
-    public SetBlockAt(Instruction instruction) throws InstructionParseException {
+    public BlockCondition(Instruction instruction) throws InstructionParseException {
         super(instruction, true);
         namespacedID = instruction.next() + ":" + instruction.next();
         ItemsAdderUtil.validateCustomBlockSilently(instruction.getPackage(), namespacedID);
@@ -24,10 +25,10 @@ public class SetBlockAt extends QuestEvent {
     }
 
     @Override
-    protected Void execute(String playerID) throws QuestRuntimeException {
-        CustomBlock cs = CustomBlock.getInstance(namespacedID);
-        Location location = locationData.get(playerID);
-        cs.place(location);
-        return null;
+    protected Boolean execute(Profile profile) throws QuestRuntimeException {
+        Location location = locationData.get(profile);
+        CustomBlock cb = CustomBlock.byAlreadyPlaced(location.getBlock());
+        return cb != null && cb.getNamespacedID().equalsIgnoreCase(namespacedID);
     }
+
 }

@@ -1,10 +1,12 @@
-package cc.mewcraft.betonquest.itemsadder.objectives;
+package cc.mewcraft.betonquest.itemsadder;
 
 import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.Objective;
+import org.betonquest.betonquest.api.profiles.OnlineProfile;
+import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.betonquest.betonquest.utils.PlayerConverter;
 import org.bukkit.Bukkit;
@@ -16,12 +18,12 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 
-public class SmeltingItem extends Objective implements Listener {
+public class SmeltObjective extends Objective implements Listener {
 
     private final String namespacedID;
     private final int amount;
 
-    public SmeltingItem(Instruction instruction) throws InstructionParseException {
+    public SmeltObjective(Instruction instruction) throws InstructionParseException {
         super(instruction);
         template = SmeltData.class;
         amount = instruction.getInt();
@@ -38,15 +40,15 @@ public class SmeltingItem extends Objective implements Listener {
         if (e.getInventory().getType() == InventoryType.FURNACE || e.getInventory().getType() == InventoryType.BLAST_FURNACE) {
             if (e.getRawSlot() == 2) {
 
-                String playerID = PlayerConverter.getID(player);
-                if (containsPlayer(playerID)) {
+                OnlineProfile profile = PlayerConverter.getID(player);
+                if (containsPlayer(profile)) {
                     CustomStack cs = CustomStack.byItemStack(e.getCurrentItem());
                     if (cs != null && cs.getNamespacedID().equalsIgnoreCase(namespacedID)) {
-                        if (checkConditions(playerID)) {
-                            SmeltData playerData = (SmeltData) dataMap.get(playerID);
+                        if (checkConditions(profile)) {
+                            SmeltData playerData = (SmeltData) dataMap.get(profile);
                             playerData.subtract(e.getCurrentItem().getAmount());
                             if (playerData.isZero()) {
-                                completeObjective(playerID);
+                                completeObjective(profile);
                             }
                         }
                     }
@@ -62,8 +64,8 @@ public class SmeltingItem extends Objective implements Listener {
             && event.getRawSlot() == 2
             && event.getClick() == ClickType.SHIFT_LEFT
             && event.getWhoClicked() instanceof Player player) {
-            String playerID = PlayerConverter.getID(player);
-            if (containsPlayer(playerID)) {
+            OnlineProfile profile = PlayerConverter.getID(player);
+            if (containsPlayer(profile)) {
                 event.setCancelled(true);
             }
         }
@@ -85,19 +87,19 @@ public class SmeltingItem extends Objective implements Listener {
     }
 
     @Override
-    public String getProperty(String name, String playerID) {
+    public String getProperty(String name, Profile profile) {
         if ("left".equalsIgnoreCase(name))
-            return Integer.toString(amount - ((SmeltData) dataMap.get(playerID)).getAmount());
+            return Integer.toString(amount - ((SmeltData) dataMap.get(profile)).getAmount());
         if ("amount".equalsIgnoreCase(name))
-            return Integer.toString(((SmeltData) dataMap.get(playerID)).getAmount());
+            return Integer.toString(((SmeltData) dataMap.get(profile)).getAmount());
         return "";
     }
 
     public static class SmeltData extends Objective.ObjectiveData {
         private int amount;
 
-        public SmeltData(String instruction, String playerID, String objID) {
-            super(instruction, playerID, objID);
+        public SmeltData(String instruction, Profile profile, String objID) {
+            super(instruction, profile, objID);
             amount = Integer.parseInt(instruction);
         }
 
@@ -118,4 +120,5 @@ public class SmeltingItem extends Objective implements Listener {
             return Integer.toString(amount);
         }
     }
+
 }

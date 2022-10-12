@@ -1,10 +1,12 @@
-package cc.mewcraft.betonquest.itemsadder.objectives;
+package cc.mewcraft.betonquest.itemsadder;
 
 import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.Objective;
+import org.betonquest.betonquest.api.profiles.OnlineProfile;
+import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.betonquest.betonquest.utils.PlayerConverter;
 import org.bukkit.Bukkit;
@@ -17,13 +19,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class CraftingItem extends Objective implements Listener {
+public class CraftObjective extends Objective implements Listener {
 
     private final String namespacedID;
     private final ItemStack item;
     private final int amount;
 
-    public CraftingItem(Instruction instruction) throws InstructionParseException {
+    public CraftObjective(Instruction instruction) throws InstructionParseException {
         super(instruction);
         template = CraftData.class;
         amount = instruction.getInt();
@@ -39,17 +41,17 @@ public class CraftingItem extends Objective implements Listener {
     public void onCrafting(CraftItemEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
 
-        String playerID = PlayerConverter.getID(player);
-        CraftData playerData = (CraftData) dataMap.get(playerID);
+        OnlineProfile profile = PlayerConverter.getID(player);
+        CraftData playerData = (CraftData) dataMap.get(profile);
 
-        if (containsPlayer(playerID) && checkConditions(playerID)) {
+        if (containsPlayer(profile) && checkConditions(profile)) {
             ItemStack result = event.getRecipe().getResult();
             CustomStack customStack = CustomStack.byItemStack(result);
             if (customStack != null && customStack.getNamespacedID().equalsIgnoreCase(namespacedID)) {
                 int absoluteCreations = countPossibleCrafts(event);
                 int remainingSpace = countRemainingSpace(player);
                 playerData.subtract(Math.min(remainingSpace, absoluteCreations));
-                if (playerData.isZero()) completeObjective(playerID);
+                if (playerData.isZero()) completeObjective(profile);
             }
         }
     }
@@ -94,19 +96,19 @@ public class CraftingItem extends Objective implements Listener {
     }
 
     @Override
-    public String getProperty(String name, String playerID) {
+    public String getProperty(String name, Profile profile) {
         if ("left".equalsIgnoreCase(name))
-            return Integer.toString(amount - ((CraftData) dataMap.get(playerID)).getAmount());
+            return Integer.toString(amount - ((CraftData) dataMap.get(profile)).getAmount());
         if ("amount".equalsIgnoreCase(name))
-            return Integer.toString(((CraftData) dataMap.get(playerID)).getAmount());
+            return Integer.toString(((CraftData) dataMap.get(profile)).getAmount());
         return "";
     }
 
     public static class CraftData extends Objective.ObjectiveData {
         private int amount;
 
-        public CraftData(String instruction, String playerID, String objID) {
-            super(instruction, playerID, objID);
+        public CraftData(String instruction, Profile profile, String objID) {
+            super(instruction, profile, objID);
             amount = Integer.parseInt(instruction);
         }
 
@@ -127,4 +129,5 @@ public class CraftingItem extends Objective implements Listener {
             return String.valueOf(amount);
         }
     }
+
 }

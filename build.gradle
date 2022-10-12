@@ -32,6 +32,7 @@ repositories {
         content {
             includeGroup("com.github.TownyAdvanced")
             includeGroup("com.github.LoneDev6")
+            includeGroup("com.github.DieReicheErethons")
         }
         metadataSources {
             artifact()
@@ -60,6 +61,7 @@ dependencies {
     compileOnly('org.betonquest:betonquest:2.0.0-SNAPSHOT')
     compileOnly('com.github.TownyAdvanced:Towny:0.98.3.9')
     compileOnly('com.github.LoneDev6:api-itemsadder:3.0.0')
+    compileOnly('com.github.DieReicheErethons:Brewery:3.1')
 
     // Test
     testCompileOnly('org.purpurmc.purpur:purpur-api:1.19.2-R0.1-SNAPSHOT')
@@ -92,7 +94,7 @@ task deploy {
             def jarFileName = jar.archiveFile.get().toString()
             print jarFileName
             workingDir '.'
-            commandLine 'scp', jarFileName, 'dev:data/devmisc/plugins'
+            commandLine 'scp', jarFileName, 'dev:data/dev/plugins'
         }
     }
 }

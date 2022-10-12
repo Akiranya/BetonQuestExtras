@@ -1,25 +1,25 @@
-package cc.mewcraft.betonquest.itemsadder.events;
+package cc.mewcraft.betonquest.itemsadder;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import lombok.CustomLog;
 import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.QuestEvent;
+import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
-import org.betonquest.betonquest.utils.PlayerConverter;
 
 @CustomLog
-public class PlayAnimation extends QuestEvent {
+public class PlayAnimationEvent extends QuestEvent {
 
     private final String animation;
 
-    public PlayAnimation(Instruction instruction) throws InstructionParseException {
+    public PlayAnimationEvent(Instruction instruction) throws InstructionParseException {
         super(instruction, true);
         animation = instruction.next();
     }
 
     @Override
-    protected Void execute(String playerID) {
-        ItemsAdder.playTotemAnimation(PlayerConverter.getPlayer(playerID), animation);
+    protected Void execute(Profile profile) {
+        ItemsAdder.playTotemAnimation(profile.getOnlineProfile().getOnlinePlayer(), animation);
         return null;
     }
 

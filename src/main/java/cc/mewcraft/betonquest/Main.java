@@ -1,19 +1,22 @@
 package cc.mewcraft.betonquest;
 
-import cc.mewcraft.betonquest.itemsadder.conditions.HasItemInHand;
-import cc.mewcraft.betonquest.itemsadder.conditions.HasItems;
-import cc.mewcraft.betonquest.itemsadder.conditions.IsBlock;
-import cc.mewcraft.betonquest.itemsadder.conditions.WearItems;
-import cc.mewcraft.betonquest.itemsadder.events.GiveItems;
-import cc.mewcraft.betonquest.itemsadder.events.PlayAnimation;
-import cc.mewcraft.betonquest.itemsadder.events.RemoveItems;
-import cc.mewcraft.betonquest.itemsadder.events.SetBlockAt;
-import cc.mewcraft.betonquest.itemsadder.objectives.BlockBreak;
-import cc.mewcraft.betonquest.itemsadder.objectives.BlockPlace;
-import cc.mewcraft.betonquest.itemsadder.objectives.CraftingItem;
-import cc.mewcraft.betonquest.itemsadder.objectives.EnchantItem;
-import cc.mewcraft.betonquest.itemsadder.objectives.PickupItem;
-import cc.mewcraft.betonquest.itemsadder.objectives.SmeltingItem;
+import cc.mewcraft.betonquest.brewery.GiveBrewEvent;
+import cc.mewcraft.betonquest.brewery.HasBrewCondition;
+import cc.mewcraft.betonquest.brewery.TakeBrewEvent;
+import cc.mewcraft.betonquest.itemsadder.HasItemInHandCondition;
+import cc.mewcraft.betonquest.itemsadder.HasItemCondition;
+import cc.mewcraft.betonquest.itemsadder.BlockCondition;
+import cc.mewcraft.betonquest.itemsadder.ArmorCondition;
+import cc.mewcraft.betonquest.itemsadder.GiveItemEvent;
+import cc.mewcraft.betonquest.itemsadder.PlayAnimationEvent;
+import cc.mewcraft.betonquest.itemsadder.RemoveItemEvent;
+import cc.mewcraft.betonquest.itemsadder.SetBlockEvent;
+import cc.mewcraft.betonquest.itemsadder.BreakBlockObjective;
+import cc.mewcraft.betonquest.itemsadder.PlaceBlockObjective;
+import cc.mewcraft.betonquest.itemsadder.CraftObjective;
+import cc.mewcraft.betonquest.itemsadder.EnchantObjective;
+import cc.mewcraft.betonquest.itemsadder.PickupObjective;
+import cc.mewcraft.betonquest.itemsadder.SmeltObjective;
 import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
 import me.lucko.helper.Events;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
@@ -30,25 +33,26 @@ public class Main extends ExtendedJavaPlugin {
 
     @Override
     public void enable() {
-        // Conditions
-        BetonQuest.getInstance().registerConditions("hasitems", HasItems.class);
-        BetonQuest.getInstance().registerConditions("wearitems", WearItems.class);
-        BetonQuest.getInstance().registerConditions("hasiteminhand", HasItemInHand.class);
-        BetonQuest.getInstance().registerConditions("isblock", IsBlock.class);
+        // Brewery
+        BetonQuest.getInstance().registerConditions("hasbrew", HasBrewCondition.class);
+        BetonQuest.getInstance().registerEvents("takebrew", TakeBrewEvent.class);
+        BetonQuest.getInstance().registerEvents("givebrew", GiveBrewEvent.class);
 
-        // Events
-        BetonQuest.getInstance().registerEvents("removeitems", RemoveItems.class);
-        BetonQuest.getInstance().registerEvents("giveitems", GiveItems.class);
-        BetonQuest.getInstance().registerEvents("setblockat", SetBlockAt.class);
-        BetonQuest.getInstance().registerEvents("playanimation", PlayAnimation.class);
-
-        // Objectives
-        BetonQuest.getInstance().registerObjectives("craftitems", CraftingItem.class);
-        BetonQuest.getInstance().registerObjectives("pickupitems", PickupItem.class);
-        BetonQuest.getInstance().registerObjectives("blockbreak", BlockBreak.class);
-        BetonQuest.getInstance().registerObjectives("blockplace", BlockPlace.class);
-        BetonQuest.getInstance().registerObjectives("enchantitem", EnchantItem.class);
-        BetonQuest.getInstance().registerObjectives("smeltingitems", SmeltingItem.class);
+        // ItemsAdder
+        BetonQuest.getInstance().registerConditions("iahas", HasItemCondition.class);
+        BetonQuest.getInstance().registerConditions("iaarmor", ArmorCondition.class);
+        BetonQuest.getInstance().registerConditions("iahand", HasItemInHandCondition.class);
+        BetonQuest.getInstance().registerConditions("iablock", BlockCondition.class);
+        BetonQuest.getInstance().registerEvents("iaremove", RemoveItemEvent.class);
+        BetonQuest.getInstance().registerEvents("iagive", GiveItemEvent.class);
+        BetonQuest.getInstance().registerEvents("iasetblock", SetBlockEvent.class);
+        BetonQuest.getInstance().registerEvents("iaplay", PlayAnimationEvent.class);
+        BetonQuest.getInstance().registerObjectives("iacraft", CraftObjective.class);
+        BetonQuest.getInstance().registerObjectives("iapickup", PickupObjective.class);
+        BetonQuest.getInstance().registerObjectives("iabreak", BreakBlockObjective.class);
+        BetonQuest.getInstance().registerObjectives("iaplace", PlaceBlockObjective.class);
+        BetonQuest.getInstance().registerObjectives("iaenchant", EnchantObjective.class);
+        BetonQuest.getInstance().registerObjectives("iasmelt", SmeltObjective.class);
 
         // Reload when itemsadder data load done
         Events.subscribe(ItemsAdderLoadDataEvent.class)

@@ -1,21 +1,21 @@
-package cc.mewcraft.betonquest.itemsadder.conditions;
+package cc.mewcraft.betonquest.itemsadder;
 
 import cc.mewcraft.betonquest.util.ItemsAdderUtil;
 import dev.lone.itemsadder.api.CustomStack;
 import lombok.CustomLog;
 import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.Condition;
+import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
-import org.betonquest.betonquest.utils.PlayerConverter;
 import org.bukkit.inventory.ItemStack;
 
 @CustomLog
-public class HasItemInHand extends Condition {
+public class HasItemInHandCondition extends Condition {
 
     private final String namespacedID;
     private final int amount;
 
-    public HasItemInHand(Instruction instruction) throws InstructionParseException {
+    public HasItemInHandCondition(Instruction instruction) throws InstructionParseException {
         super(instruction, true);
         amount = instruction.getInt();
         if (amount < 1) {
@@ -26,8 +26,8 @@ public class HasItemInHand extends Condition {
     }
 
     @Override
-    protected Boolean execute(String playerID) {
-        ItemStack handItem = PlayerConverter.getPlayer(playerID).getInventory().getItemInMainHand();
+    protected Boolean execute(final Profile profile) {
+        ItemStack handItem = profile.getOnlineProfile().getOnlinePlayer().getInventory().getItemInMainHand();
         CustomStack cs = CustomStack.byItemStack(handItem);
         if (cs != null && cs.getNamespacedID().equalsIgnoreCase(namespacedID)) {
             return handItem.getAmount() >= amount;
