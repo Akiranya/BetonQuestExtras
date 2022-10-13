@@ -1,5 +1,6 @@
 package cc.mewcraft.betonquest.brewery;
 
+import cc.mewcraft.betonquest.var.GenericVariable;
 import com.dre.brewery.recipe.BRecipe;
 import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.QuestEvent;
@@ -15,7 +16,7 @@ public class GiveBrewEvent extends QuestEvent {
 
     private final Integer amount;
     private final Integer quality;
-    private final BRecipe recipe;
+    private final GenericVariable<BRecipe> recipe;
 
     public GiveBrewEvent(final Instruction instruction) throws InstructionParseException {
         super(instruction, true);
@@ -28,21 +29,23 @@ public class GiveBrewEvent extends QuestEvent {
             throw new InstructionParseException("Brew quality must be between 0 and 10!");
         }
 
-        final String name = instruction.next().replace("_", " ");
-
-        BRecipe recipe = null;
-        for (final BRecipe r : BRecipe.getAllRecipes()) {
-            if (r.hasName(name)) {
-                recipe = r;
-                break;
-            }
-        }
-
-        if (recipe == null) {
-            throw new InstructionParseException("There is no brewing recipe with the name " + name + "!");
-        } else {
-            this.recipe = recipe;
-        }
+        recipe = new GenericVariable<>(
+                instruction.next().replace("_", " "),
+                instruction.getPackage(),
+                recipeName -> {
+                    BRecipe recipe = null;
+                    for (final BRecipe r : BRecipe.getAllRecipes()) {
+                        if (r.hasName(recipeName)) {
+                            recipe = r;
+                            break;
+                        }
+                    }
+                    if (recipe == null) {
+                        throw new QuestRuntimeException("There is no brewing recipe with the name " + "!");
+                    } else {
+                        return recipe;
+                    }
+                });
     }
 
     @Override
@@ -51,7 +54,7 @@ public class GiveBrewEvent extends QuestEvent {
 
         final ItemStack[] brews = new ItemStack[amount];
         for (int i = 0; i < amount; i++) {
-            brews[i] = recipe.create(quality);
+            brews[i] = recipe.resolve(profile).create(quality);
         }
 
         final Collection<ItemStack> remaining = player.getInventory().addItem(brews).values();

@@ -1,5 +1,6 @@
 package cc.mewcraft.betonquest.brewery;
 
+import cc.mewcraft.betonquest.var.GenericVariable;
 import com.dre.brewery.Brew;
 import com.dre.brewery.recipe.BRecipe;
 import org.betonquest.betonquest.Instruction;
@@ -14,7 +15,7 @@ public class TakeBrewEvent extends QuestEvent {
 
     private final Integer count;
     private final BrewQuality quality;
-    private final BRecipe brew;
+    private final GenericVariable<BRecipe> recipe;
 
     public TakeBrewEvent(final Instruction instruction) throws InstructionParseException {
         super(instruction, true);
@@ -27,21 +28,23 @@ public class TakeBrewEvent extends QuestEvent {
         String qualityString = instruction.next();
         quality = new BrewQuality(qualityString);
 
-        final String name = instruction.next().replace("_", " ");
-
-        BRecipe recipe = null;
-        for (final BRecipe r : BRecipe.getAllRecipes()) {
-            if (r.hasName(name)) {
-                recipe = r;
-                break;
-            }
-        }
-
-        if (recipe == null) {
-            throw new InstructionParseException("There is no brewing recipe with the name " + name + "!");
-        } else {
-            this.brew = recipe;
-        }
+        recipe = new GenericVariable<>(
+                instruction.next().replace("_", " "),
+                instruction.getPackage(),
+                recipeName -> {
+                    BRecipe recipe = null;
+                    for (final BRecipe r : BRecipe.getAllRecipes()) {
+                        if (r.hasName(recipeName)) {
+                            recipe = r;
+                            break;
+                        }
+                    }
+                    if (recipe == null) {
+                        throw new QuestRuntimeException("There is no brewing recipe with the name " + "!");
+                    } else {
+                        return recipe;
+                    }
+                });
     }
 
     @Override
@@ -54,7 +57,7 @@ public class TakeBrewEvent extends QuestEvent {
             final ItemStack item = player.getInventory().getItem(i);
             if (item != null) {
                 Brew brew = Brew.get(item);
-                if (brew != null && brew.getCurrentRecipe().equals(this.brew) && quality.contains(brew.getQuality())) {
+                if (brew != null && brew.getCurrentRecipe().equals(recipe.resolve(profile)) && quality.contains(brew.getQuality())) {
                     if (item.getAmount() - remaining <= 0) {
                         remaining -= item.getAmount();
                         player.getInventory().setItem(i, null);
