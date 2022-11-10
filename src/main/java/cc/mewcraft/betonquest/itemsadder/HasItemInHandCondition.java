@@ -7,6 +7,7 @@ import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.Condition;
 import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
+import org.betonquest.betonquest.exceptions.QuestRuntimeException;
 import org.bukkit.inventory.ItemStack;
 
 @CustomLog
@@ -26,8 +27,9 @@ public class HasItemInHandCondition extends Condition {
     }
 
     @Override
-    protected Boolean execute(final Profile profile) {
-        ItemStack handItem = profile.getOnlineProfile().getOnlinePlayer().getInventory().getItemInMainHand();
+    protected Boolean execute(final Profile profile) throws QuestRuntimeException {
+        ItemStack handItem = profile.getOnlineProfile().orElseThrow(() -> new QuestRuntimeException("Player is offline"))
+                .getPlayer().getInventory().getItemInMainHand();
         CustomStack cs = CustomStack.byItemStack(handItem);
         if (cs != null && cs.getNamespacedID().equalsIgnoreCase(namespacedID)) {
             return handItem.getAmount() >= amount;

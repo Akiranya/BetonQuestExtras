@@ -7,6 +7,7 @@ import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.Condition;
 import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
+import org.betonquest.betonquest.exceptions.QuestRuntimeException;
 import org.bukkit.inventory.ItemStack;
 
 @CustomLog
@@ -20,8 +21,9 @@ public class ArmorCondition extends Condition {
     }
 
     @Override
-    protected Boolean execute(Profile profile) {
-        ItemStack[] inventoryItems = profile.getOnlineProfile().getOnlinePlayer().getInventory().getArmorContents();
+    protected Boolean execute(Profile profile) throws QuestRuntimeException {
+        ItemStack[] inventoryItems = profile.getOnlineProfile().orElseThrow(() -> new QuestRuntimeException("Player is offline"))
+                .getPlayer().getInventory().getArmorContents();
         for (ItemStack is : inventoryItems) {
             CustomStack cs = CustomStack.byItemStack(is);
             if (cs != null && cs.getNamespacedID().equalsIgnoreCase(namespacedID)) {

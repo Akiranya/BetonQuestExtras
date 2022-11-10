@@ -7,6 +7,7 @@ import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.QuestEvent;
 import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
+import org.betonquest.betonquest.exceptions.QuestRuntimeException;
 import org.bukkit.inventory.ItemStack;
 
 @CustomLog
@@ -23,10 +24,11 @@ public class GiveItemEvent extends QuestEvent {
     }
 
     @Override
-    protected Void execute(Profile profile) {
+    protected Void execute(Profile profile) throws QuestRuntimeException {
         ItemStack is = CustomStack.getInstance(namespacedID).getItemStack();
         is.setAmount(amount);
-        profile.getOnlineProfile().getOnlinePlayer().getInventory().addItem(is);
+        profile.getOnlineProfile().orElseThrow(() -> new QuestRuntimeException("Player is offline"))
+                .getPlayer().getInventory().addItem(is);
         return null;
     }
 

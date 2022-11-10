@@ -6,6 +6,7 @@ import org.betonquest.betonquest.Instruction;
 import org.betonquest.betonquest.api.QuestEvent;
 import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
+import org.betonquest.betonquest.exceptions.QuestRuntimeException;
 
 @CustomLog
 public class PlayAnimationEvent extends QuestEvent {
@@ -18,8 +19,12 @@ public class PlayAnimationEvent extends QuestEvent {
     }
 
     @Override
-    protected Void execute(Profile profile) {
-        ItemsAdder.playTotemAnimation(profile.getOnlineProfile().getOnlinePlayer(), animation);
+    protected Void execute(Profile profile) throws QuestRuntimeException {
+        ItemsAdder.playTotemAnimation(
+                profile.getOnlineProfile()
+                        .orElseThrow(() -> new QuestRuntimeException("Player is offline"))
+                        .getPlayer(),
+                animation);
         return null;
     }
 

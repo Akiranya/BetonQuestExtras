@@ -49,7 +49,7 @@ public class HasBrewCondition extends Condition {
 
     @Override
     protected Boolean execute(final Profile profile) throws QuestRuntimeException {
-        final Player player = profile.getOnlineProfile().getOnlinePlayer();
+        final Player player = profile.getOnlineProfile().orElseThrow(() -> new QuestRuntimeException("Player is offline")).getPlayer();
 
         int remaining = count;
 
