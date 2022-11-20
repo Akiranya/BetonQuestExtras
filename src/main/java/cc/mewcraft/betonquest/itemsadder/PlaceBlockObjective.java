@@ -54,7 +54,7 @@ public class PlaceBlockObjective extends Objective implements Listener {
             } else if (notify && playerData.getAmount() % notifyInterval == 0) {
                 if (playerData.getAmount() > amount) {
                     try {
-                        Config.sendNotify(instruction.getPackage().getPackagePath(), profile, "blocks_to_place", new String[]{String.valueOf(playerData.getAmount() - amount)}, "blocks_to_place,info");
+                        Config.sendNotify(instruction.getPackage().getQuestPath(), profile, "blocks_to_place", new String[]{String.valueOf(playerData.getAmount() - amount)}, "blocks_to_place,info");
                     } catch (QuestRuntimeException ex1) {
                         try {
                             LOG.warn("The notify system was unable to play a sound for the 'blocks_to_place' category in '" + instruction.getObjective().getFullID() + "'. Error was: '" + ex1.getMessage() + "'");
@@ -65,7 +65,7 @@ public class PlaceBlockObjective extends Objective implements Listener {
                 }
             } else {
                 try {
-                    Config.sendNotify(instruction.getPackage().getPackagePath(), profile, "blocks_to_place", new String[]{String.valueOf(amount - playerData.getAmount())}, "blocks_to_place,info");
+                    Config.sendNotify(instruction.getPackage().getQuestPath(), profile, "blocks_to_place", new String[]{String.valueOf(amount - playerData.getAmount())}, "blocks_to_place,info");
                 } catch (QuestRuntimeException ex1) {
                     try {
                         LOG.warn("The notify system was unable to play a sound for the 'blocks_to_place' category in '" + instruction.getObjective().getFullID() + "'. Error was: '" + ex1.getMessage() + "'");

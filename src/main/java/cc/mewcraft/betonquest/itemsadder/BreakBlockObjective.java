@@ -54,7 +54,7 @@ public class BreakBlockObjective extends Objective implements Listener {
             } else if (notify && playerData.getAmount() % notifyInterval == 0) {
                 if (playerData.getAmount() > amount) {
                     try {
-                        Config.sendNotify(instruction.getPackage().getPackagePath(), profile, "blocks_to_break", new String[]{String.valueOf(playerData.getAmount() - amount)}, "blocks_to_break,info");
+                        Config.sendNotify(instruction.getPackage().getQuestPath(), profile, "blocks_to_break", new String[]{String.valueOf(playerData.getAmount() - amount)}, "blocks_to_break,info");
                     } catch (QuestRuntimeException exception) {
                         try {
                             LOG.warn("The notify system was unable to play a sound for the 'blocks_to_break' category in '" + instruction.getObjective().getFullID() + "'. Error was: '" + exception.getMessage() + "'");
@@ -65,7 +65,7 @@ public class BreakBlockObjective extends Objective implements Listener {
                 }
             } else {
                 try {
-                    Config.sendNotify(instruction.getPackage().getPackagePath(), profile, "blocks_to_break", new String[]{String.valueOf(amount - playerData.getAmount())}, "blocks_to_break,info");
+                    Config.sendNotify(instruction.getPackage().getQuestPath(), profile, "blocks_to_break", new String[]{String.valueOf(amount - playerData.getAmount())}, "blocks_to_break,info");
                 } catch (QuestRuntimeException exception) {
                     try {
                         LOG.warn("The notify system was unable to play a sound for the 'blocks_to_break' category in '" + instruction.getObjective().getFullID() + "'. Error was: '" + exception.getMessage() + "'");

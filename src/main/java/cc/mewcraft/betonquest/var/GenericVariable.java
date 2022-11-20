@@ -3,7 +3,7 @@ package cc.mewcraft.betonquest.var;
 import me.lucko.helper.utils.annotation.NonnullByDefault;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.VariableString;
-import org.betonquest.betonquest.api.config.QuestPackage;
+import org.betonquest.betonquest.api.config.quest.QuestPackage;
 import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.exceptions.InstructionParseException;
 import org.betonquest.betonquest.exceptions.QuestRuntimeException;

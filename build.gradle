@@ -9,7 +9,7 @@ java {
 
 ext.pluginNameUpper = "BetonQuest-Mewcraft"
 ext.majorVersion = 1
-ext.minorVersion = 2
+ext.minorVersion = 3
 ext.minecraftVersion = "1.19"
 
 group = 'cc.mewcraft'
