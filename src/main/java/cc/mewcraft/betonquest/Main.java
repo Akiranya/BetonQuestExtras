@@ -17,8 +17,6 @@ import cc.mewcraft.betonquest.itemsadder.CraftObjective;
 import cc.mewcraft.betonquest.itemsadder.EnchantObjective;
 import cc.mewcraft.betonquest.itemsadder.PickupObjective;
 import cc.mewcraft.betonquest.itemsadder.SmeltObjective;
-import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
-import me.lucko.helper.Events;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
 import org.betonquest.betonquest.BetonQuest;
 
@@ -55,9 +53,9 @@ public class Main extends ExtendedJavaPlugin {
         BetonQuest.getInstance().registerObjectives("iasmelt", SmeltObjective.class);
 
         // Reload when itemsadder data load done
-        Events.subscribe(ItemsAdderLoadDataEvent.class)
-                .handler(e -> BetonQuest.getInstance().reload())
-                .bindWith(this);
+        // Events.subscribe(ItemsAdderLoadDataEvent.class)
+        //         .handler(e -> BetonQuest.getInstance().reload())
+        //         .bindWith(this);
     }
 
     @Override
