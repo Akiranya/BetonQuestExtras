@@ -1,8 +1,8 @@
-name: 'BetonQuest-Mewcraft'
+name: 'BetonQuestExtras'
 version: '${version}'
 main: cc.mewcraft.betonquest.Main
 api-version: 1.19
-depend: [ BetonQuest, helper, Towny, ItemsAdder ]
-softdepend: [ ]
+depend: [ helper, BetonQuest ]
+softdepend: [ Towny, ItemsAdder ]
 authors: [ Nailm ]
-description: BetonQuest addon for Mewcraft server.
+description: Brings BetonQuest more integrations with 3rd party plugins.
